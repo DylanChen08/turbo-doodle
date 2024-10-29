@@ -64,7 +64,7 @@
         </el-tooltip>
 
         <!-- 验证码 -->
-        <el-form-item prop="captchaCode">
+        <el-form-item prop="captchaCode" v-if="false">
           <div class="input-wrapper">
             <svg-icon icon-class="captcha" class="mx-2" />
             <el-input
@@ -156,8 +156,8 @@ const loginFormRef = ref<FormInstance>();
 const loginData = ref<LoginData>({
   username: "admin",
   password: "123456",
-  captchaKey: "",
-  captchaCode: "",
+  // captchaKey: "",
+  // captchaCode: "",
 } as LoginData);
 
 const loginRules = computed(() => {
@@ -200,24 +200,20 @@ function getCaptcha() {
 }
 
 /** 登录表单提交 */
-function handleLoginSubmit() {
-  loginFormRef.value?.validate((valid: boolean) => {
-    if (valid) {
-      loading.value = true;
-      userStore
-        .login(loginData.value)
-        .then(() => {
-          const { path, queryParams } = parseRedirect();
-          router.push({ path: path, query: queryParams });
-        })
-        .catch(() => {
-          getCaptcha();
-        })
-        .finally(() => {
-          loading.value = false;
-        });
+async function handleLoginSubmit() {
+  const isValid = await loginFormRef.value?.validate();
+  if (isValid) {
+    loading.value = true;
+    try {
+      await userStore.login(loginData.value);
+      const { path, queryParams } = parseRedirect();
+      await router.push({ path, query: queryParams });
+    } catch (error) {
+      // getCaptcha();
+    } finally {
+      loading.value = false;
     }
-  });
+  }
 }
 
 /** 解析 redirect 字符串 为 path 和  queryParams */
@@ -264,7 +260,7 @@ function checkCapslock(event: KeyboardEvent) {
 }
 
 onMounted(() => {
-  getCaptcha();
+  // getCaptcha();
 });
 </script>
 

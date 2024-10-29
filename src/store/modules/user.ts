@@ -2,6 +2,7 @@ import AuthAPI, { LoginData } from "@/api/auth";
 import UserAPI, { UserInfo } from "@/api/user";
 import { resetRouter } from "@/router";
 import { store } from "@/store";
+import { Base64 } from "js-base64";
 
 import { TOKEN_KEY } from "@/enums/CacheEnum";
 
@@ -17,18 +18,21 @@ export const useUserStore = defineStore("user", () => {
    * @returns
    * @param loginData
    */
-  function login(loginData: LoginData) {
-    return new Promise<void>((resolve, reject) => {
-      AuthAPI.login(loginData)
-        .then((data) => {
-          const { tokenType, accessToken } = data;
-          localStorage.setItem(TOKEN_KEY, tokenType + " " + accessToken); // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+  async function login(loginData: LoginData): Promise<void> {
+    try {
+      const params = {
+        sUserName: "",
+        sPassword: "",
+        iLanguage: 1,
+      };
+      params.sUserName = loginData.username.trim();
+      params.sPassword = Base64.encode(loginData.password);
+      const response = await AuthAPI.loginApi(params);
+      const { tokenType, accessToken } = response;
+      localStorage.setItem(TOKEN_KEY, `${tokenType} ${accessToken}`); // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // 获取信息(用户昵称、头像、角色集合、权限集合)

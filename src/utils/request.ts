@@ -40,8 +40,9 @@ service.interceptors.response.use(
       return response;
     }
 
-    const { code, data, msg } = response.data;
-    if (code === ResultEnum.SUCCESS) {
+    const { code, data, msg, status } = response.data;
+    debugger;
+    if (status.code === ResultEnum.SUCCESS) {
       return data;
     }
 

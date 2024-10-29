@@ -1,22 +1,17 @@
 import request from "@/utils/request";
 
-const AUTH_BASE_URL = "/api/v1/auth";
+const AUTH_BASE_URL = "/cgi-bin/entry.cgi";
 
 class AuthAPI {
   /** 登录 接口*/
-  static login(data: LoginData) {
-    const formData = new FormData();
-    formData.append("username", data.username);
-    formData.append("password", data.password);
-    formData.append("captchaKey", data.captchaKey);
-    formData.append("captchaCode", data.captchaCode);
+  static loginApi(data: LoginData) {
     return request<any, LoginResult>({
-      url: `${AUTH_BASE_URL}/login`,
-      method: "post",
-      data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      url: `${AUTH_BASE_URL}/system/login`,
+      method: "put",
+      data,
+      // headers: {
+      //   "Content-Type": "multipart/form-data",
+      // },
     });
   }
 
@@ -42,13 +37,15 @@ export default AuthAPI;
 /** 登录请求参数 */
 export interface LoginData {
   /** 用户名 */
-  username: string;
+  sUserName: string;
   /** 密码 */
-  password: string;
-  /** 验证码缓存key */
-  captchaKey: string;
-  /** 验证码 */
-  captchaCode: string;
+  sPassword: string;
+  /** 语言 */
+  iLanguage: number;
+  // /** 验证码缓存key */
+  // captchaKey: string;
+  // /** 验证码 */
+  // captchaCode: string;
 }
 
 /** 登录响应 */
