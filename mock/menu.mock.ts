@@ -5,7 +5,7 @@ export default defineMock([
     url: "menus/routes",
     method: ["GET"],
     body: {
-      code: "200",
+      code: 200,
       data: [
         {
           path: "/system",
@@ -409,7 +409,10 @@ export default defineMock([
           ],
         },
       ],
-      msg: "一切ok",
+      msg: "一切ok1111cccc",
+      status: {
+        code: 200,
+      },
     },
   },
 

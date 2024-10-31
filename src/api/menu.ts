@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 // 菜单基础URL
-const MENU_BASE_URL = "/menus";
+const MENU_BASE_URL = "/api/v1/menus";
 
 class MenuAPI {
   /**

@@ -30,7 +30,6 @@ export const useUserStore = defineStore("user", () => {
       const response = await AuthAPI.loginApi(params);
       const { token } = response;
       localStorage.setItem(TOKEN_KEY, `${token}`); // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
-      user.value.roles = ["admin"];
     } catch (error) {
       console.log(error);
     }

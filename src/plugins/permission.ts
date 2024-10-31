@@ -51,6 +51,7 @@ async function handleUserHasToken(
       dynamicRoutes.forEach((route: RouteRecordRaw) => router.addRoute(route));
       next({ ...to, replace: true });
     } catch (error) {
+      console.error(error);
       await userStore.resetToken();
       redirectToLogin(to, next);
     } finally {

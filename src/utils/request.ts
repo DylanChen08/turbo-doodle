@@ -44,7 +44,6 @@ service.interceptors.response.use(
     if (status.code === ResultEnum.SUCCESS) {
       return data;
     }
-
     ElMessage.error(msg || "系统出错");
     return Promise.reject(new Error(msg || "Error"));
   },
