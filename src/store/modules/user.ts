@@ -60,15 +60,17 @@ export const useUserStore = defineStore("user", () => {
   // user logout
   function logout() {
     return new Promise<void>((resolve, reject) => {
-      AuthAPI.logout()
-        .then(() => {
-          localStorage.setItem(TOKEN_KEY, "");
-          location.reload(); // 清空路由
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
+      // AuthAPI.logout()
+      //   .then(() => {
+      //     localStorage.setItem(TOKEN_KEY, "");
+      //     location.reload(); // 清空路由
+      //     resolve();
+      //   })
+      //   .catch((error) => {
+      //     reject(error);
+      //   });
+      localStorage.setItem(TOKEN_KEY, "");
+      resolve();
     });
   }
 

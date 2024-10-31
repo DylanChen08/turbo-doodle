@@ -155,7 +155,7 @@ const loginFormRef = ref<FormInstance>();
 
 const loginData = ref<LoginData>({
   username: "admin",
-  password: "123456",
+  password: "",
   // captchaKey: "",
   // captchaCode: "",
 } as LoginData);
