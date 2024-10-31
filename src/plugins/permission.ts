@@ -42,7 +42,7 @@ async function handleUserHasToken(
     return;
   }
 
-  if (1) {
+  if (hasRoles) {
     handleNavigation(to, from, next);
   } else {
     try {

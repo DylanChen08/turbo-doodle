@@ -28,8 +28,9 @@ export const useUserStore = defineStore("user", () => {
       params.sUserName = loginData.username.trim();
       params.sPassword = Base64.encode(loginData.password);
       const response = await AuthAPI.loginApi(params);
-      const { tokenType, accessToken } = response;
-      localStorage.setItem(TOKEN_KEY, `${tokenType} ${accessToken}`); // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
+      const { token } = response;
+      localStorage.setItem(TOKEN_KEY, `${token}`); // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
+      user.value.roles = ["admin"];
     } catch (error) {
       console.log(error);
     }

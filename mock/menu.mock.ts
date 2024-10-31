@@ -5,7 +5,7 @@ export default defineMock([
     url: "menus/routes",
     method: ["GET"],
     body: {
-      code: "00000",
+      code: "200",
       data: [
         {
           path: "/system",

@@ -51,7 +51,7 @@ export interface LoginData {
 /** 登录响应 */
 export interface LoginResult {
   /** 访问token */
-  accessToken?: string;
+  token?: string;
   /** 过期时间(单位：毫秒) */
   expires?: number;
   /** 刷新token */
