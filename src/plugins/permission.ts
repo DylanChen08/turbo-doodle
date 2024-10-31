@@ -35,7 +35,7 @@ async function handleUserHasToken(
 ) {
   const userStore = useUserStore();
   const permissionStore = usePermissionStore();
-
+  const hasRoles = userStore.user.roles && userStore.user.roles.length > 0;
   if (to.path === "/login") {
     next({ path: "/" });
     NProgress.done();
