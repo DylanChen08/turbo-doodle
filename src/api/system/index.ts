@@ -1,10 +1,10 @@
 import request from "@/utils/request";
 
-const BASE_API = "/cgi-bin/entry.cgi/";
+const BASE_API = "/cgi-bin/entry.cgi";
 
 class BaseConfigAPI {
   static getBaseConfigApi(): Promise<BaseConfigFormVO> {
-    return request.get(`${BASE_API}/system/baseConfig`);
+    return request.get(`${BASE_API}/system/device-info`);
   }
 }
 
