@@ -5,10 +5,9 @@
     label-width="200px"
     style="max-width: 1200px"
   >
-    <!-- Loop through the formFieldsConfig array to render the form fields dynamically -->
     <el-row>
       <template v-for="(field, index) in formFieldsConfig" :key="index">
-        <el-col :span="12" v-if="field.type === 'input'">
+        <el-col :span="12">
           <el-form-item :label="$t(field.label)" :prop="field.prop">
             <component
               v-if="field.type === 'input'"
@@ -20,29 +19,24 @@
                 field.disabled !== undefined ? field.disabled : roleId !== 0
               "
             />
-
-            <component
+            <el-select
               v-else-if="field.type === 'select'"
-              :is="field.component"
               v-model="formData[field.prop]"
-              :placeholder="$t(field.placeholder)"
-              style="width: 100%"
+              placeholder="全部"
+              clearable
             >
-              <el-option
-                v-for="item in field.options"
-                :key="item.value"
-                :label="item.name"
-                :value="item.value"
-                :disabled="item.isDisabled"
-              />
-            </component>
-            <!--              <qrcode v-else-if="field.type === 'qrcode'" :value="formData[field.prop]" :options="{ width: 100 }"></qrcode>-->
+              <el-option label="正常" :value="1" />
+              <el-option label="禁用" :value="0" />
+            </el-select>
+            <qrcode-vue
+              v-else-if="field.type === 'qrcode'"
+              :value="`sdfwefkweifewifjewifjweif`"
+            />
           </el-form-item>
         </el-col>
       </template>
     </el-row>
 
-    <!-- Submit and Progress Bars -->
     <el-col :span="24">
       <el-form-item>
         <el-button
@@ -70,15 +64,13 @@
       <!--            :totalCount="res?.devicesCount || 0"-->
       <!--          />-->
     </el-col>
-
-    <!-- Other progress bars as needed -->
   </el-form>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import BaseConfigAPI, { BaseConfigFormVO } from "@/api/system";
-import { ElInput } from "element-plus";
+import { ElInput, ElSelect } from "element-plus";
 
 defineOptions({
   name: "BaseConfiguration",
@@ -167,7 +159,7 @@ const formFieldsConfig = [
     label: "deviceLanguage",
     prop: "deviceLanguage",
     type: "select",
-    component: "el-select",
+    component: ElSelect,
     options: [], // Assuming you have a `languageOptions` array defined somewhere
     placeholder: "2.2.251",
   },

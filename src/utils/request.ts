@@ -3,72 +3,79 @@ import { useUserStoreHook } from "@/store/modules/user";
 import { ResultEnum } from "@/enums/ResultEnum";
 import { TOKEN_KEY } from "@/enums/CacheEnum";
 import qs from "qs";
+import { ElNotification, ElMessage } from "element-plus";
 
-// 创建 axios 实例
+// Create axios instance
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 50000,
   headers: { "Content-Type": "application/json;charset=utf-8" },
-
-  paramsSerializer: (params) => {
-    return qs.stringify(params);
-  },
+  paramsSerializer: (params) => qs.stringify(params), // Use qs for query parameter serialization
 });
 
-// 请求拦截器
+// Request interceptor
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
-      config.headers.Authorization = token;
-    }
+    if (token) config.headers.Authorization = token; // Add token to header if available
     return config;
   },
-  (error: any) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// 响应拦截器
-service.interceptors.response.use(
-  (response: AxiosResponse) => {
-    // 检查配置的响应类型是否为二进制类型（'blob' 或 'arraybuffer'）, 如果是，直接返回响应对象
-    if (
-      response.config.responseType === "blob" ||
-      response.config.responseType === "arraybuffer"
-    ) {
-      return response;
-    }
+// Handle response data and errors
+const handleResponseData = (response: AxiosResponse) => {
+  const { code, data, msg, status } = response.data;
 
-    const { code, data, msg, status } = response.data;
-    if (status.code === ResultEnum.SUCCESS) {
-      return data;
-    }
-    ElMessage.error(msg || "系统出错");
-    return Promise.reject(new Error(msg || "Error"));
-  },
-  (error: any) => {
-    // 异常处理
-    if (error.response.data) {
-      const { code, msg } = error.response.data;
-      if (code === ResultEnum.TOKEN_INVALID) {
-        ElNotification({
-          title: "提示",
-          message: "您的会话已过期，请重新登录",
-          type: "info",
-        });
-        useUserStoreHook()
-          .resetToken()
-          .then(() => {
-            location.reload();
-          });
-      } else {
-        ElMessage.error(msg || "系统出错");
-      }
-    }
-    return Promise.reject(error.message);
+  // If response is a binary type, return the response object as is
+  if (
+    response.config.responseType === "blob" ||
+    response.config.responseType === "arraybuffer"
+  ) {
+    return response;
   }
-);
 
-// 导出 axios 实例
+  // Handle success and token invalid errors
+  if (status.code === ResultEnum.SUCCESS) {
+    return data;
+  }
+
+  if (status.code === ResultEnum.TOKEN_INVALID) {
+    handleTokenInvalid();
+  }
+
+  ElMessage.error(msg || "System Error");
+  return Promise.reject(new Error(msg || "Error"));
+};
+
+const handleError = (error: any) => {
+  // General error handler
+  const { response } = error;
+  if (response?.data) {
+    const { code, msg } = response.data;
+
+    if (code === ResultEnum.TOKEN_INVALID) {
+      handleTokenInvalid();
+    } else {
+      ElMessage.error(msg || "System Error");
+    }
+  }
+  return Promise.reject(error.message);
+};
+
+const handleTokenInvalid = () => {
+  ElNotification({
+    title: "Notice",
+    message: "Your session has expired, please log in again.",
+    type: "info",
+  });
+  useUserStoreHook()
+    .resetToken()
+    .then(() => location.reload()); // Reset token and reload the page
+};
+
+// Response interceptor
+service.interceptors.response.use(handleResponseData, handleError);
+
+// Export axios instance
 export default service;

@@ -11,9 +11,11 @@ import "@/styles/index.scss";
 import "uno.css";
 import "animate.css";
 import { InstallCodeMirror } from "codemirror-editor-vue3";
+import QrcodeVue from "qrcode.vue";
 
 const app = createApp(App);
 // 注册插件
 app.use(setupPlugins);
 app.use(InstallCodeMirror);
+app.component("QrcodeVue", QrcodeVue);
 app.mount("#app");

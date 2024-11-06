@@ -14,5 +14,5 @@ export const enum ResultEnum {
   /**
    * 令牌无效或过期
    */
-  TOKEN_INVALID = "401",
+  TOKEN_INVALID = 401,
 }
