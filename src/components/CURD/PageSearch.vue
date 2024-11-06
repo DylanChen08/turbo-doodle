@@ -125,6 +125,7 @@
 import type { FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import type { IObject, ISearchConfig } from "./types";
+import { QuestionFilled } from "@element-plus/icons-vue";
 
 // 定义接收的属性
 const props = defineProps<{

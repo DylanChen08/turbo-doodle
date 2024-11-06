@@ -1,71 +1,79 @@
 <template>
-  <el-form
-    ref="elForm"
-    :model="formData"
-    label-width="200px"
-    style="max-width: 1200px"
-  >
-    <el-row>
-      <template v-for="(field, index) in formFieldsConfig" :key="index">
-        <el-col :span="12">
-          <el-form-item :label="$t(field.label)" :prop="field.prop">
-            <component
-              v-if="field.type === 'input'"
-              :is="field.component"
-              v-model="formData[field.prop]"
-              :maxlength="field.maxlength"
-              :show-word-limit="field.showWordLimit"
-              :disabled="
-                field.disabled !== undefined ? field.disabled : roleId !== 0
-              "
-            />
-            <el-select
-              v-else-if="field.type === 'select'"
-              v-model="formData[field.prop]"
-              placeholder="全部"
-              clearable
-              style="width: 100%"
-            >
-              <el-option label="正常" :value="1" />
-              <el-option label="禁用" :value="0" />
-            </el-select>
-            <qrcode-vue
-              v-else-if="field.type === 'qrcode'"
-              :value="`sdfwefkweifewifjewifjweif`"
-            />
-          </el-form-item>
-        </el-col>
-      </template>
-    </el-row>
+  <article style="background: #fff">
+    <el-form
+      ref="elForm"
+      :model="formData"
+      label-width="200px"
+      style="max-width: 1200px"
+    >
+      <el-row>
+        <template v-for="(field, index) in formFieldsConfig" :key="index">
+          <el-col :span="12">
+            <el-form-item :label="$t(field.label)" :prop="field.prop">
+              <component
+                v-if="field.type === 'input'"
+                :is="field.component"
+                v-model="formData[field.prop]"
+                :maxlength="field.maxlength"
+                :show-word-limit="field.showWordLimit"
+                :disabled="
+                  field.disabled !== undefined ? field.disabled : roleId !== 0
+                "
+              />
+              <component
+                v-else-if="field.type === 'select'"
+                :is="field.component"
+                v-model="formData[field.prop]"
+                :placeholder="$t(field.placeholder)"
+                style="width: 100%"
+                :key="formData.deviceLanguage"
+              >
+                <el-option
+                  v-for="item in field.options"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                  :disabled="item.isDisabled"
+                />
+              </component>
+              <qrcode-vue
+                v-else-if="field.type === 'qrcode'"
+                :value="`sdfwefkweifewifjewifjweif`"
+              />
+            </el-form-item>
+          </el-col>
+        </template>
+      </el-row>
 
-    <el-col :span="24">
-      <el-form-item>
-        <el-button
-          :loading="loading"
-          type="primary"
-          style="width: 120px"
-          @click="submitForm('elForm')"
-        >
-          {{ $t("2.2.17") }}
-        </el-button>
-      </el-form-item>
-    </el-col>
+      <el-col :span="24">
+        <el-form-item>
+          <el-button
+            :loading="loading"
+            type="primary"
+            style="width: 120px"
+            @click="submitForm('elForm')"
+          >
+            {{ $t("2.2.17") }}
+          </el-button>
+        </el-form-item>
+      </el-col>
 
-    <el-col :span="24">
-      <div class="tab-line">
-        <div>{{ $t("DeviceLimit") }}</div>
-      </div>
-    </el-col>
+      <el-col :span="24">
+        <div class="tab-line">
+          <div>{{ $t("DeviceLimit") }}</div>
+        </div>
+      </el-col>
 
-    <el-col :span="24">
-      <!--          <progress-bar-->
-      <!--            :label="$t('personnel')"-->
-      <!--            :percentage="personCount"-->
-      <!--            :currentCount="res?.faceCount || 0"-->
-      <!--            :totalCount="res?.devicesCount || 0"-->
-      <!--          />-->
-    </el-col>
-  </el-form>
+      <el-col :span="24">
+        <!--          <progress-bar-->
+        <!--            :label="$t('personnel')"-->
+        <!--            :percentage="personCount"-->
+        <!--            :currentCount="res?.faceCount || 0"-->
+        <!--            :totalCount="res?.devicesCount || 0"-->
+        <!--          />-->
+      </el-col>
+    </el-form>
+  </article>
 </template>
 
 <script setup lang="ts">
@@ -161,7 +169,7 @@ const formFieldsConfig = [
     prop: "deviceLanguage",
     type: "select",
     component: ElSelect,
-    options: [], // Assuming you have a `languageOptions` array defined somewhere
+    options: [],
     placeholder: "2.2.251",
   },
   {
