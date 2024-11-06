@@ -24,6 +24,7 @@
               v-model="formData[field.prop]"
               placeholder="全部"
               clearable
+              style="width: 100%"
             >
               <el-option label="正常" :value="1" />
               <el-option label="禁用" :value="0" />

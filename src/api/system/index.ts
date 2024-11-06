@@ -49,4 +49,6 @@ export interface BaseConfigFormVO {
 
   /** Web版本 */
   webVersion: string;
+
+  [key: string]: string | number; // Index signature to allow any string key
 }
