@@ -1,5 +1,5 @@
 <template>
-  <article style="background: #fff; border: 1px solid red">
+  <AppContainer>
     <el-form
       ref="elForm"
       :model="formData"
@@ -73,14 +73,14 @@
         <!--          />-->
       </el-col>
     </el-form>
-  </article>
+  </AppContainer>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import BaseConfigAPI, { BaseConfigFormVO } from "@/api/system";
 import { ElInput, ElSelect, FormInstance } from "element-plus";
-
+import { useUserStore } from "@/store";
 defineOptions({
   name: "BaseConfiguration",
   inheritAttrs: false,
