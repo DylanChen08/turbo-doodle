@@ -24,7 +24,7 @@
                 v-else-if="field.type === 'select'"
                 :is="field.component"
                 v-model="formData[field.prop]"
-                :placeholder="$t(field.placeholder)"
+                :placeholder="$t(field.placeholder || 'defaultPlaceholder')"
                 style="width: 100%"
                 :key="formData.deviceLanguage"
               >
