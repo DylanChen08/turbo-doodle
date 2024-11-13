@@ -1,5 +1,5 @@
 <template>
-  <article style="background: #fff">
+  <article style="background: #fff; border: 1px solid red">
     <el-form
       ref="elForm"
       :model="formData"
@@ -51,7 +51,7 @@
             :loading="loading"
             type="primary"
             style="width: 120px"
-            @click="submitForm('elForm')"
+            @click="submitForm(ruleFormRef)"
           >
             {{ $t("2.2.17") }}
           </el-button>
@@ -79,13 +79,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import BaseConfigAPI, { BaseConfigFormVO } from "@/api/system";
-import { ElInput, ElSelect } from "element-plus";
+import { ElInput, ElSelect, FormInstance } from "element-plus";
 
 defineOptions({
   name: "BaseConfiguration",
   inheritAttrs: false,
 });
-
+const ruleFormRef = ref<FormInstance>();
 const formData = ref<BaseConfigFormVO>({
   algorithmVersion: "",
   deviceCapacity: 0,
@@ -194,6 +194,19 @@ const getBaseConfig = async () => {
   } catch (e) {
     console.log(e);
   }
+};
+
+const submitForm = async (ruleFormRef: FormInstance | undefined) => {
+  // 直接传递 deviceName 和 deviceLanguage，而不是嵌套在 data 中
+  const params = {
+    deviceName: formData.value.deviceName,
+    deviceLanguage: formData.value.deviceLanguage,
+  };
+
+  // 调用 updateBaseConfigApi 方法，并传递正确的参数结构
+  const res = await BaseConfigAPI.updateBaseConfigApi(params);
+  if (!res) return;
+  ElMessage.success("成功");
 };
 
 onMounted(() => {

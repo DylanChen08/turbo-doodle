@@ -6,6 +6,17 @@ class BaseConfigAPI {
   static getBaseConfigApi(): Promise<BaseConfigFormVO> {
     return request.get(`${BASE_API}/system/device-info`);
   }
+
+  static updateBaseConfigApi(data: {
+    deviceName: string;
+    deviceLanguage: number;
+  }): Promise<BaseConfigFormVO> {
+    return request({
+      url: `${BASE_API}/system/device-info`,
+      method: "post",
+      data: data,
+    });
+  }
 }
 
 export default BaseConfigAPI;
