@@ -29,9 +29,10 @@
                 :placeholder="$t(field.placeholder || 'defaultPlaceholder')"
                 style="width: 240px"
               />
-              <qrcode-vue
+              <qr-code
                 v-else-if="field.type === 'qrcode'"
                 :value="`sdfwefkweifewifjewifjweif`"
+                qrcode-url="http://localhost:3000/favicon.ico"
               />
             </el-form-item>
           </el-col>
@@ -56,15 +57,6 @@
           <div>{{ $t("DeviceLimit") }}</div>
         </div>
       </el-col>
-
-      <el-col :span="24">
-        <!--          <progress-bar-->
-        <!--            :label="$t('personnel')"-->
-        <!--            :percentage="personCount"-->
-        <!--            :currentCount="res?.faceCount || 0"-->
-        <!--            :totalCount="res?.devicesCount || 0"-->
-        <!--          />-->
-      </el-col>
     </el-form>
   </AppContainer>
 </template>
@@ -74,6 +66,7 @@ import { onMounted, ref } from "vue";
 import BaseConfigAPI, { BaseConfigFormVO, LanguageOption } from "@/api/system";
 import { ElInput, ElSelect, FormInstance } from "element-plus";
 import { useUserStore } from "@/store";
+import QrCode from "@/views/system-management/base-configuration/components/qr-code.vue";
 defineOptions({
   name: "BaseConfiguration",
   inheritAttrs: false,
