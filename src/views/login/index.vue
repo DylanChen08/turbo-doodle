@@ -30,7 +30,7 @@
             <i-ep-user class="mx-2" />
             <el-input
               ref="username"
-              v-model="loginData.sUsername"
+              v-model="loginData.sUserName"
               :placeholder="$t('login.username')"
               name="username"
               size="large"
@@ -64,25 +64,25 @@
         </el-tooltip>
 
         <!-- 验证码 -->
-        <el-form-item prop="captchaCode" v-if="false">
-          <div class="input-wrapper">
-            <svg-icon icon-class="captcha" class="mx-2" />
-            <el-input
-              v-model="loginData.captchaCode"
-              auto-complete="off"
-              size="large"
-              class="flex-1"
-              :placeholder="$t('login.captchaCode')"
-              @keyup.enter="handleLoginSubmit"
-            />
+        <!--        <el-form-item prop="captchaCode" v-if="false">-->
+        <!--          <div class="input-wrapper">-->
+        <!--            <svg-icon icon-class="captcha" class="mx-2" />-->
+        <!--            <el-input-->
+        <!--              v-model="loginData.captchaCode"-->
+        <!--              auto-complete="off"-->
+        <!--              size="large"-->
+        <!--              class="flex-1"-->
+        <!--              :placeholder="$t('login.captchaCode')"-->
+        <!--              @keyup.enter="handleLoginSubmit"-->
+        <!--            />-->
 
-            <el-image
-              @click="getCaptcha"
-              :src="captchaBase64"
-              class="captcha-image"
-            />
-          </div>
-        </el-form-item>
+        <!--            <el-image-->
+        <!--              @click="getCaptcha"-->
+        <!--              :src="captchaBase64"-->
+        <!--              class="captcha-image"-->
+        <!--            />-->
+        <!--          </div>-->
+        <!--        </el-form-item>-->
 
         <!-- 登录按钮 -->
         <el-button
@@ -161,14 +161,14 @@ const loginData = ref<LoginData>({
 
 const loginRules = computed(() => {
   return {
-    username: [
+    sUsername: [
       {
         required: true,
         trigger: "blur",
         message: t("login.message.username.required"),
       },
     ],
-    password: [
+    sPassword: [
       {
         required: true,
         trigger: "blur",

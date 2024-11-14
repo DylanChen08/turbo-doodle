@@ -17,8 +17,7 @@ export const useUserStore = defineStore("user", () => {
 
   async function getLanguageOptions(): Promise<void> {
     try {
-      const response = await BaseConfigAPI.getLanguageOptionsApi();
-      languageOptions.value = response;
+      languageOptions.value = await BaseConfigAPI.getLanguageOptionsApi();
     } catch (error) {
       console.log(error);
     }

@@ -20,22 +20,15 @@
                   field.disabled !== undefined ? field.disabled : roleId !== 0
                 "
               />
-              <component
+              <el-select-v2
                 v-else-if="field.type === 'select'"
-                :is="field.component"
+                :props="props"
+                value-ley="name"
                 v-model="formData[field.prop]"
+                :options="languageOptions"
                 :placeholder="$t(field.placeholder || 'defaultPlaceholder')"
-                style="width: 100%"
-                :key="formData.deviceLanguage"
-              >
-                <el-option
-                  v-for="item in field.options"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                  :disabled="item.isDisabled"
-                />
-              </component>
+                style="width: 240px"
+              />
               <qrcode-vue
                 v-else-if="field.type === 'qrcode'"
                 :value="`sdfwefkweifewifjewifjweif`"
@@ -103,9 +96,12 @@ const formData = ref<BaseConfigFormVO>({
 }); // 初始化 formData
 
 const roleId = ref<number>(1); // 示例：roleId 的默认值为 1
-
+const props = {
+  label: "name",
+  value: "value",
+};
 const loading = ref<Boolean>(false);
-const languageOptions = ref<LanguageOption>([]);
+const languageOptions = ref<LanguageOption[]>([]);
 
 const formFieldsConfig = [
   {
@@ -171,7 +167,6 @@ const formFieldsConfig = [
     prop: "deviceLanguage",
     type: "select",
     component: ElSelect,
-    options: languageOptions.value,
     placeholder: "2.2.251",
   },
   {
@@ -192,7 +187,10 @@ const formFieldsConfig = [
 const getBaseConfig = async () => {
   try {
     formData.value = await BaseConfigAPI.getBaseConfigApi();
-    languageOptions.value = useUserStore.languageOptions;
+    await useUserStore().getLanguageOptions();
+    await nextTick(() => {
+      languageOptions.value = useUserStore().languageOptions;
+    });
   } catch (e) {
     console.log(e);
   }
@@ -201,8 +199,10 @@ const getBaseConfig = async () => {
 const submitForm = async (ruleFormRef: FormInstance | undefined) => {
   // 直接传递 deviceName 和 deviceLanguage，而不是嵌套在 data 中
   const params = {
-    deviceName: formData.value.deviceName,
-    deviceLanguage: formData.value.deviceLanguage,
+    data: {
+      deviceName: formData.value.deviceName,
+      deviceLanguage: formData.value.deviceLanguage,
+    },
   };
 
   // 调用 updateBaseConfigApi 方法，并传递正确的参数结构
