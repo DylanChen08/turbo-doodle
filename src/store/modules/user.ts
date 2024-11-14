@@ -5,12 +5,24 @@ import { store } from "@/store";
 import { Base64 } from "js-base64";
 
 import { TOKEN_KEY } from "@/enums/CacheEnum";
+import BaseConfigAPI, { LanguageOption } from "@/api/system";
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<UserInfo>({
     roles: [],
     perms: [],
   });
+
+  const languageOptions = ref<LanguageOption[]>([]);
+
+  async function getLanguageOptions(): Promise<void> {
+    try {
+      const response = await BaseConfigAPI.getLanguageOptionsApi();
+      languageOptions.value = response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   /**
    * 登录
@@ -25,8 +37,8 @@ export const useUserStore = defineStore("user", () => {
         sPassword: "",
         iLanguage: 1,
       };
-      params.sUserName = loginData.username.trim();
-      params.sPassword = Base64.encode(loginData.password);
+      params.sUserName = loginData.sUserName.trim();
+      params.sPassword = Base64.encode(loginData.sPassword);
       const response = await AuthAPI.loginApi(params);
       const { token } = response;
       localStorage.setItem(TOKEN_KEY, `${token}`); // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
@@ -86,7 +98,9 @@ export const useUserStore = defineStore("user", () => {
 
   return {
     user,
+    languageOptions,
     login,
+    getLanguageOptions,
     getUserInfo,
     logout,
     resetToken,

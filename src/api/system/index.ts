@@ -3,6 +3,9 @@ import request from "@/utils/request";
 const BASE_API = "/cgi-bin/entry.cgi";
 
 class BaseConfigAPI {
+  static getLanguageOptionsApi(): Promise<LanguageOptionsVO> {
+    return request.get(`${BASE_API}/system/device-language-config`);
+  }
   static getBaseConfigApi(): Promise<BaseConfigFormVO> {
     return request.get(`${BASE_API}/system/device-info`);
   }
@@ -63,3 +66,13 @@ export interface BaseConfigFormVO {
 
   [key: string]: string | number; // Index signature to allow any string key
 }
+
+/** 语言选项类型 */
+export interface LanguageOption {
+  key: string;
+  name: string;
+  value: number;
+}
+
+/** API 返回的语言选项列表类型 */
+export type LanguageOptionsVO = LanguageOption[];

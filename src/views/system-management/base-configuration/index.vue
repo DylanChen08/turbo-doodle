@@ -78,7 +78,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import BaseConfigAPI, { BaseConfigFormVO } from "@/api/system";
+import BaseConfigAPI, { BaseConfigFormVO, LanguageOption } from "@/api/system";
 import { ElInput, ElSelect, FormInstance } from "element-plus";
 import { useUserStore } from "@/store";
 defineOptions({
@@ -105,6 +105,8 @@ const formData = ref<BaseConfigFormVO>({
 const roleId = ref<number>(1); // 示例：roleId 的默认值为 1
 
 const loading = ref<Boolean>(false);
+const languageOptions = ref<LanguageOption>([]);
+
 const formFieldsConfig = [
   {
     label: "deviceName",
@@ -169,7 +171,7 @@ const formFieldsConfig = [
     prop: "deviceLanguage",
     type: "select",
     component: ElSelect,
-    options: [],
+    options: languageOptions.value,
     placeholder: "2.2.251",
   },
   {
@@ -187,10 +189,10 @@ const formFieldsConfig = [
     placeholder: "User Manual QR Code",
   },
 ];
-
 const getBaseConfig = async () => {
   try {
     formData.value = await BaseConfigAPI.getBaseConfigApi();
+    languageOptions.value = useUserStore.languageOptions;
   } catch (e) {
     console.log(e);
   }

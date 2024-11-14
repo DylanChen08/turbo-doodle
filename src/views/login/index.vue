@@ -30,7 +30,7 @@
             <i-ep-user class="mx-2" />
             <el-input
               ref="username"
-              v-model="loginData.username"
+              v-model="loginData.sUsername"
               :placeholder="$t('login.username')"
               name="username"
               size="large"
@@ -49,7 +49,7 @@
             <div class="input-wrapper">
               <i-ep-lock class="mx-2" />
               <el-input
-                v-model="loginData.password"
+                v-model="loginData.sPassword"
                 :placeholder="$t('login.password')"
                 type="password"
                 name="password"
@@ -154,11 +154,10 @@ const captchaBase64 = ref();
 const loginFormRef = ref<FormInstance>();
 
 const loginData = ref<LoginData>({
-  username: "admin",
-  password: "",
-  // captchaKey: "",
-  // captchaCode: "",
-} as LoginData);
+  sUserName: "",
+  sPassword: "",
+  iLanguage: 0,
+});
 
 const loginRules = computed(() => {
   return {
@@ -192,12 +191,12 @@ const loginRules = computed(() => {
 });
 
 /** 获取验证码 */
-function getCaptcha() {
-  AuthAPI.getCaptcha().then((data) => {
-    loginData.value.captchaKey = data.captchaKey;
-    captchaBase64.value = data.captchaBase64;
-  });
-}
+// function getCaptcha() {
+//   AuthAPI.getCaptcha().then((data) => {
+//     loginData.value.captchaKey = data.captchaKey;
+//     captchaBase64.value = data.captchaBase64;
+//   });
+// }
 
 /** 登录表单提交 */
 async function handleLoginSubmit() {
@@ -244,11 +243,7 @@ const toggleTheme = () => {
 
 /** 根据屏幕宽度切换设备模式 */
 watchEffect(() => {
-  if (height.value < 600) {
-    icpVisible.value = false;
-  } else {
-    icpVisible.value = true;
-  }
+  icpVisible.value = height.value >= 600;
 });
 
 /** 检查输入大小写 */
@@ -261,6 +256,8 @@ function checkCapslock(event: KeyboardEvent) {
 
 onMounted(() => {
   // getCaptcha();
+  // 获取翻译选项
+  userStore.getLanguageOptions();
 });
 </script>
 

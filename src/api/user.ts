@@ -183,7 +183,7 @@ export default UserAPI;
 /** 登录用户信息 */
 export interface UserInfo {
   /** 用户ID */
-  userId: number;
+  userId?: string;
 
   /** 用户名 */
   username?: string;
