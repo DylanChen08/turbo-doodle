@@ -1,0 +1,83 @@
+import { ElInput, ElSelect } from "element-plus";
+
+export const formFieldsConfigs = [
+  {
+    label: "deviceName",
+    prop: "deviceName",
+    type: "input",
+    component: ElInput,
+    maxlength: 64,
+    showWordLimit: true,
+    disabled: false,
+  },
+  {
+    label: "deviceNumber",
+    prop: "deviceNum",
+    type: "input",
+    component: ElInput,
+    disabled: true,
+  },
+  {
+    label: "deviceModel",
+    prop: "deviceModel",
+    type: "input",
+    component: ElInput,
+    disabled: true,
+  },
+  {
+    label: "softwareVersion",
+    prop: "softwareVersion",
+    type: "input",
+    component: ElInput,
+    disabled: true,
+  },
+  {
+    label: "kernelVersion",
+    prop: "kernelVersion",
+    type: "input",
+    component: ElInput,
+    disabled: true,
+  },
+  {
+    label: "webVersion",
+    prop: "webVersion",
+    type: "input",
+    component: ElInput,
+    disabled: true,
+  },
+  {
+    label: "hardwareVersion",
+    prop: "hardwareVersion",
+    type: "input",
+    component: ElInput,
+    disabled: true,
+  },
+  {
+    label: "algorithmVersion",
+    prop: "algorithmVersion",
+    type: "input",
+    component: ElInput,
+    disabled: true,
+  },
+  {
+    label: "deviceLanguage",
+    prop: "deviceLanguage",
+    type: "select",
+    component: ElSelect,
+    placeholder: "2.2.251",
+  },
+  {
+    label: "deviceQRCode",
+    prop: "deviceQRCode",
+    type: "qrcode",
+    component: "qrcode",
+    placeholder: "Device QR Code",
+  },
+  {
+    label: "userManual",
+    prop: "userManual",
+    type: "qrcode",
+    component: "qrcode",
+    placeholder: "User Manual QR Code",
+  },
+];

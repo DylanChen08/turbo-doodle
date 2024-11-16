@@ -23,7 +23,7 @@
               <el-select-v2
                 v-else-if="field.type === 'select'"
                 :props="props"
-                value-ley="name"
+                value-key="name"
                 v-model="formData[field.prop]"
                 :options="languageOptions"
                 :placeholder="$t(field.placeholder || 'defaultPlaceholder')"
@@ -45,7 +45,7 @@
             :loading="loading"
             type="primary"
             style="width: 120px"
-            @click="submitForm(ruleFormRef)"
+            @click="submitForm"
           >
             {{ $t("2.2.17") }}
           </el-button>
@@ -64,9 +64,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import BaseConfigAPI, { BaseConfigFormVO, LanguageOption } from "@/api/system";
-import { ElInput, ElSelect, FormInstance } from "element-plus";
+import { FormInstance } from "element-plus";
 import { useUserStore } from "@/store";
 import QrCode from "@/views/system-management/base-configuration/components/qr-code.vue";
+import { formFieldsConfigs } from "@/views/system-management/base-configuration/form-fields-configs";
+import { useRequest } from "@/hooks/use-request";
+
 defineOptions({
   name: "BaseConfiguration",
   inheritAttrs: false,
@@ -86,111 +89,37 @@ const formData = ref<BaseConfigFormVO>({
   softwareVersion: "",
   webVersion: "",
   deviceName: "",
-}); // 初始化 formData
+});
 
-const roleId = ref<number>(1); // 示例：roleId 的默认值为 1
-const props = {
-  label: "name",
-  value: "value",
-};
-const loading = ref<Boolean>(false);
+const { commonRequest, loading } = useRequest(
+  BaseConfigAPI.getBaseConfigApi,
+  formData
+);
+
+const roleId = ref<number>(1);
+const props = { label: "name", value: "value" };
 const languageOptions = ref<LanguageOption[]>([]);
+const formFieldsConfig = formFieldsConfigs;
 
-const formFieldsConfig = [
-  {
-    label: "deviceName",
-    prop: "deviceName",
-    type: "input",
-    component: ElInput,
-    maxlength: 64,
-    showWordLimit: true,
-    disabled: false,
-  },
-  {
-    label: "deviceNumber",
-    prop: "deviceNum",
-    type: "input",
-    component: ElInput,
-    disabled: true,
-  },
-  {
-    label: "deviceModel",
-    prop: "deviceModel",
-    type: "input",
-    component: ElInput,
-    disabled: true,
-  },
-  {
-    label: "softwareVersion",
-    prop: "softwareVersion",
-    type: "input",
-    component: ElInput,
-    disabled: true,
-  },
-  {
-    label: "kernelVersion",
-    prop: "kernelVersion",
-    type: "input",
-    component: ElInput,
-    disabled: true,
-  },
-  {
-    label: "webVersion",
-    prop: "webVersion",
-    type: "input",
-    component: ElInput,
-    disabled: true,
-  },
-  {
-    label: "hardwareVersion",
-    prop: "hardwareVersion",
-    type: "input",
-    component: ElInput,
-    disabled: true,
-  },
-  {
-    label: "algorithmVersion",
-    prop: "algorithmVersion",
-    type: "input",
-    component: ElInput,
-    disabled: true,
-  },
-  {
-    label: "deviceLanguage",
-    prop: "deviceLanguage",
-    type: "select",
-    component: ElSelect,
-    placeholder: "2.2.251",
-  },
-  {
-    label: "deviceQRCode",
-    prop: "deviceQRCode",
-    type: "qrcode",
-    component: "qrcode",
-    placeholder: "Device QR Code",
-  },
-  {
-    label: "userManual",
-    prop: "userManual",
-    type: "qrcode",
-    component: "qrcode",
-    placeholder: "User Manual QR Code",
-  },
-];
 const getBaseConfig = async () => {
   try {
-    formData.value = await BaseConfigAPI.getBaseConfigApi();
-    await useUserStore().getLanguageOptions();
-    await nextTick(() => {
-      languageOptions.value = useUserStore().languageOptions;
-    });
+    formData.value = await commonRequest();
+
+    const userStore = useUserStore();
+    await userStore.getLanguageOptions();
+    languageOptions.value = userStore.languageOptions;
   } catch (e) {
-    console.log(e);
+    ElMessage.error("获取基础配置失败，请重试");
+    console.error(e);
   }
 };
 
-const submitForm = async (ruleFormRef: FormInstance | undefined) => {
-  // 直接传递 deviceName 和 deviceLanguage，而不是嵌套在 data 中
+const submitForm = async () => {
+  if (!ruleFormRef.value) return;
+
+  const valid = await ruleFormRef.value.validate();
+  if (!valid) return;
+
   const params = {
     data: {
       deviceName: formData.value.deviceName,
@@ -198,13 +127,13 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
     },
   };
 
-  // 调用 updateBaseConfigApi 方法，并传递正确的参数结构
   const res = await BaseConfigAPI.updateBaseConfigApi(params);
-  if (!res) return;
-  ElMessage.success("成功");
+  if (res) {
+    ElMessage.success("成功");
+  }
 };
 
-onMounted(() => {
-  getBaseConfig(); // Call to fetch the data
+onMounted(async () => {
+  await getBaseConfig();
 });
 </script>

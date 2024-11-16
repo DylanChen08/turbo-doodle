@@ -11,8 +11,10 @@ class BaseConfigAPI {
   }
 
   static updateBaseConfigApi(data: {
-    deviceName: string;
-    deviceLanguage: number;
+    data: {
+      deviceName: string;
+      deviceLanguage: number;
+    };
   }): Promise<BaseConfigFormVO> {
     return request({
       url: `${BASE_API}/system/device-info`,
