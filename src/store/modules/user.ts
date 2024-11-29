@@ -5,7 +5,7 @@ import { store } from "@/store";
 import { Base64 } from "js-base64";
 
 import { TOKEN_KEY } from "@/enums/CacheEnum";
-import BaseConfigAPI, { LanguageOption } from "@/api/system";
+import BaseConfigAPI, { LanguageOptionVO } from "@/api/system";
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<UserInfo>({
@@ -13,7 +13,7 @@ export const useUserStore = defineStore("user", () => {
     perms: [],
   });
 
-  const languageOptions = ref<LanguageOption[]>([]);
+  const languageOptions = ref<LanguageOptionVO[]>([]);
 
   async function getLanguageOptions(): Promise<void> {
     try {

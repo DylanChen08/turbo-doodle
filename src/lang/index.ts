@@ -4,8 +4,16 @@ import { useAppStoreHook } from "@/store/modules/app";
 // 本地语言包
 import enLocale from "./package/en";
 import zhCnLocale from "./package/zh-cn";
+import BaseConfigAPI from "@/api/system";
+import { useRequest } from "@/hooks/use-request";
 
 const appStore = useAppStoreHook();
+
+const { commonRequest, loading } = useRequest(
+  BaseConfigAPI.getLanguageTranslationApi
+);
+
+const res = await commonRequest();
 
 const messages = {
   "zh-cn": {
@@ -15,7 +23,6 @@ const messages = {
     ...enLocale,
   },
 };
-
 const i18n = createI18n({
   legacy: false,
   locale: appStore.language,

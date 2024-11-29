@@ -33,7 +33,6 @@ class LogAPI {
   /**
    * 获取访问趋势
    *
-   * @param queryParams
    * @returns
    */
   static getVisitStats() {

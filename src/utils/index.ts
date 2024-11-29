@@ -36,6 +36,5 @@ export function removeClass(ele: HTMLElement, cls: string) {
  * @returns {Boolean}
  */
 export function isExternal(path: string) {
-  const isExternal = /^(https?:|http?:|mailto:|tel:)/.test(path);
-  return isExternal;
+  return /^(https?:|http?:|mailto:|tel:)/.test(path);
 }

@@ -63,7 +63,10 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import BaseConfigAPI, { BaseConfigFormVO, LanguageOption } from "@/api/system";
+import BaseConfigAPI, {
+  BaseConfigFormVO,
+  LanguageOptionVO,
+} from "@/api/system";
 import { FormInstance } from "element-plus";
 import { useUserStore } from "@/store";
 import QrCode from "@/views/system-management/base-configuration/components/qr-code.vue";
@@ -98,7 +101,7 @@ const { commonRequest, loading } = useRequest(
 
 const roleId = ref<number>(1);
 const props = { label: "name", value: "value" };
-const languageOptions = ref<LanguageOption[]>([]);
+const languageOptions = ref<LanguageOptionVO[]>([]);
 const formFieldsConfig = formFieldsConfigs;
 
 const getBaseConfig = async () => {
