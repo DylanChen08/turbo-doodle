@@ -15,8 +15,8 @@ interface RequestState<T = any> {
  */
 export function useRequest<T, P>(
   apiFun: (params: P, ...arg: any[]) => Promise<T>,
-  params: P,
-  ...arg: any[]
+  params?: P, // params 参数变为可选
+  ...arg: any[] // 额外参数依然支持
 ) {
   // 定义状态
   const state = reactive<RequestState<T>>({
@@ -32,7 +32,10 @@ export function useRequest<T, P>(
   async function commonRequest(innerParams?: P) {
     try {
       state.loading = true;
-      const res = await apiFun(innerParams || params, ...arg);
+      // 如果没有传递 innerParams，使用默认的 params 或者空对象
+      const finalParams = innerParams || params || ({} as P);
+
+      const res = await apiFun(finalParams, ...arg);
 
       // 根据实际情况更新 state
       state.sourceData = res as UnwrapRef<T>;
